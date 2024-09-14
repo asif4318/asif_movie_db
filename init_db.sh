@@ -1,11 +1,15 @@
 #!/bin/bash
 
 # Init links table
+echo "INIT LINKS TABLE\n"
+
 psql -U postgres -c "CREATE TABLE links (movie_id SERIAL, imdb_id  INTEGER, tmdb_id INTEGER);"
 
 psql -U postgres -c "copy public.links (movie_id, imdb_id, tmdb_id) FROM '/var/lib/postgresql/csv_files/links.csv' DELIMITER ',' CSV HEADER ;"
 
 ## Init ratings table
+echo "INIT RATINGS TABLE\n"
+
 psql -U postgres -c "CREATE TABLE ratings (user_id SERIAL, movie_id INTEGER, rating REAL, timestamp_numeric BIGINT, timestamp TIMESTAMP);"
 
 psql -U postgres -c "copy public.ratings (user_id, movie_id, rating, timestamp_numeric) FROM '/var/lib/postgresql/csv_files/ratings.csv' DELIMITER ',' CSV HEADER ;"
@@ -15,6 +19,8 @@ psql -U postgres -c "UPDATE ratings SET timestamp=to_timestamp(timestamp_numeric
 psql -U postgres -c "ALTER TABLE ratings DROP COLUMN timestamp_numeric;"
 
 ## Init movies_metadata table
+echo "INIT MOVIES_METADATA TABLE\n"
+
 psql -U postgres -c "CREATE TABLE movies_metadata (
     adult BOOLEAN,
     belongs_to_collection TEXT,
