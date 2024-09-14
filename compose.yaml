@@ -1,0 +1,11 @@
+services:
+  db:
+    image: "postgres:alpine"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "example"
+    volumes:
+      - ./dataset/csv_files:/var/lib/postgresql/csv_files
+      - ./init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
