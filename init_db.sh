@@ -28,7 +28,7 @@ psql -U postgres -c "CREATE TABLE api.movies_metadata (
     adult BOOLEAN,
     belongs_to_collection TEXT,
     budget INTEGER,
-    genres TEXT,
+    genres_text TEXT,
     homepage TEXT,
     movie_id INTEGER,
     imdb_id VARCHAR(15),
@@ -38,10 +38,10 @@ psql -U postgres -c "CREATE TABLE api.movies_metadata (
     popularity FLOAT DEFAULT 0.0,
     poster_path text,
     production_companies TEXT,
-    production_countries TEXT,
+    production_countries_text TEXT,
     release_date DATE, revenue BIGINT,
     runtime REAL,
-    spoken_languages TEXT,
+    spoken_languages_text TEXT,
     status TEXT,
     tagline TEXT,
     title TEXT,
@@ -50,7 +50,30 @@ psql -U postgres -c "CREATE TABLE api.movies_metadata (
     vote_count REAL
 );"
 
-psql -U postgres -c "copy api.movies_metadata (adult, belongs_to_collection, budget, genres, homepage, movie_id, imdb_id, original_language, original_title, overview, popularity, poster_path, production_companies, production_countries, release_date, revenue, runtime, spoken_languages, status, tagline, title, video, vote_average, vote_count) FROM '/var/lib/postgresql/csv_files/movies_metadata.csv' DELIMITER ',' CSV HEADER QUOTE '\"' ESCAPE '\"';"
+psql -U postgres -c "copy api.movies_metadata (adult, belongs_to_collection, budget, genres_text, homepage, movie_id, imdb_id, original_language, original_title, overview, popularity, poster_path, production_companies, production_countries_text, release_date, revenue, runtime, spoken_languages_text, status, tagline, title, video, vote_average, vote_count) FROM '/var/lib/postgresql/csv_files/movies_metadata_cleaned.csv' DELIMITER ',' CSV HEADER QUOTE '\"' ESCAPE '\"';"
+
+
+psql -U postgres -c "
+    ALTER TABLE api.movies_metadata
+    ADD COLUMN collection JSONB,
+    ADD COLUMN genres JSONB,
+    ADD COLUMN spoken_languages JSONB;
+
+
+    UPDATE api.movies_metadata
+    SET collection=to_jsonb(belongs_to_collection);
+
+    UPDATE api.movies_metadata
+    SET genres=to_jsonb(genres_text);
+
+    UPDATE api.movies_metadata
+    SET spoken_languages=to_jsonb(spoken_languages_text);
+
+    ALTER TABLE api.movies_metadata
+    DROP COLUMN belongs_to_collection,
+    DROP COLUMN genres_text,
+    DROP COLUMN spoken_languages_text;
+"
 
 # Create Web_Anon Role
 echo -e "CREATE WEB ANON ROLE\n"
