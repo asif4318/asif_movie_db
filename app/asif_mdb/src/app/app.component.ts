@@ -17,10 +17,4 @@ import { Movie } from './models/movie.model';
 export class AppComponent {
   movieService = inject(MovieService);
   title = 'asif_mdb';
-  featuredMovieData: Movie[] = [];
-
-  constructor() {
-    this.featuredMovieData = this.movieService.getMovies();
-  }
-
 }

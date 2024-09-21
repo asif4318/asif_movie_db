@@ -1,29 +1,23 @@
 import { Injectable } from "@angular/core";
 import { Movie } from "../../models/movie.model";
+import { HttpClient, HttpHandler } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class MovieService {
-    movies: Movie[] = [
-        {
-            id: 1,
-            title: "But I'm A Cheerleader",
-            posterImageURL: "zC3BaoHJsrIeqOg4eZolNszsTej.jpg"
-        },
-        {
-            id: 2,
-            title: "Toy Story",
-            posterImageURL: "uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg"
-        },
-    ]
+    apiBaseURL = "http://127.0.0.1:3000/";
 
-    getMovie(id: number): Movie | undefined {
-        return this.movies.find(e => e.id === id);
+    constructor(private http: HttpClient) {
+
     }
 
-    getMovies(): Movie[] {
-        return this.movies;
+    // Get highest grossing movies
+    getFeaturedMovies(limit: number = 3): Observable<Movie[]> {
+        // let requestURL = `${this.apiBaseURL}movies_metadata?select=id%3Amovie_id%2Ctitle%2Cposter_path&order=revenue.desc&limit=3`
+        let requestURL = `${this.apiBaseURL}movies_metadata?select=id%3Amovie_id%2Ctitle%2Cposter_path&order=revenue.desc&limit=${limit}`
+        return this.http.get<Movie[]>(requestURL);
     }
 }
