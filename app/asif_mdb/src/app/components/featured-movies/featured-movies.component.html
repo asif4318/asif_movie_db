@@ -1,0 +1,5 @@
+<div style="margin-top: 1%">
+    @for (movie of topMovies; track movie.title) {
+        <app-movie-frame [posterPath]=movie.posterImageURL [movieTitle]="movie.title" style="margin: 2%;"/>
+    }
+</div>
