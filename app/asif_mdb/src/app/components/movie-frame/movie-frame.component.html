@@ -1,4 +1,6 @@
-<div style="background-color: rgba(90, 90, 236, 0.575); text-align: center; display: inline-block; padding: 8px; border-radius: 8px;">
-    <img [ngSrc]="posterPath" width="320" height="480" sizes="5vw"/>
-    <h3>{{movieTitle}}</h3>
+<div style="background-color: rgba(90, 90, 236, 0.575); margin: 1%; text-align: center; display: inline-block; padding: 8px; border-radius: 8px;">
+    @if (posterPath$ | async) {
+        <img [src]="posterPath" width="320" height="480" sizes="5vw"/>
+    }
+        <h3>{{movieTitle}}</h3>
 </div>

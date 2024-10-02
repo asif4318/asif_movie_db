@@ -3,3 +3,5 @@
 *.DS_Store
 .env
 dataset/venv/
+app/asif_mdb/src/environments/environment.development.ts
+app/asif_mdb/src/environments/environment.ts
